@@ -23,5 +23,6 @@ uint8_t GetWeekday(uint16_t year, uint8_t month, uint8_t day);
 uint32_t CalendarToUnixTime32(const struct CalendarTime *calendar);
 void UnixTime32ToCalendarTime(uint32_t timecount, struct CalendarTime *calendar);
 
+const char *CalendarTime_UnitTest(void);
 
 #endif // CALENDARTIME_H
