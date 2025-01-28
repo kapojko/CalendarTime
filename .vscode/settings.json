@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.dpf": "yaml",
+        "calendartime.h": "c"
+    }
+}
