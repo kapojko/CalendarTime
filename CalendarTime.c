@@ -39,7 +39,7 @@ uint8_t GetWeekday(uint16_t year, uint8_t month, uint8_t day)
     return (temp2 % 7);
 }
 
-uint32_t CalendarToUnixTime32(const struct CalendarTime *calendar) {
+UnixTime32 CalendarToUnixTime32(const struct CalendarTime *calendar) {
     uint16_t t;
     uint32_t seccount = 0;
 
@@ -68,8 +68,8 @@ uint32_t CalendarToUnixTime32(const struct CalendarTime *calendar) {
     return seccount;
 }
 
-void UnixTime32ToCalendarTime(uint32_t timecount, struct CalendarTime *calendar) {
-    static uint16_t daycnt = 0;
+void UnixTime32ToCalendarTime(UnixTime32 timecount, struct CalendarTime *calendar) {
+    uint16_t daycnt = 0;
     uint32_t temp = 0;
     uint16_t temp1 = 0;
 
@@ -128,6 +128,22 @@ void UnixTime32ToCalendarTime(uint32_t timecount, struct CalendarTime *calendar)
     calendar->weekday = GetWeekday(calendar->year, calendar->month, calendar->day);
 }
 
+UnixTimeDiff32 GetUnixTimeDiff(UnixTime32 time1, UnixTime32 time2) {
+    if (time1 >= time2) {
+        return (UnixTimeDiff32)(time1 - time2);
+    } else {
+        return -(UnixTimeDiff32)(time2 - time1);
+    }
+}
+
+UnixTimeDiff32 GetUnixTimeDiffAbs(UnixTime32 time1, UnixTime32 time2) {
+    if (time1 >= time2) {
+        return (UnixTimeDiff32)(time1 - time2);
+    } else {
+        return (UnixTimeDiff32)(time2 - time1);
+    }
+}
+
 const char *CalendarTime_UnitTest(void) {
     // Test IsLeapYear function
     mu_assert("Year 2000 should be a leap year", IsLeapYear(2000) == true);
@@ -157,6 +173,16 @@ const char *CalendarTime_UnitTest(void) {
     UnixTime32ToCalendarTime(946684800, &calendarTime);
     mu_assert("Unix time 946684800 should be January 1, 2000",
         calendarTime.year == 2000 && calendarTime.month == 1 && calendarTime.day == 1);
+    
+    // Test GetUnixTimeDiff function
+    mu_assert("GetUnixTimeDiff(0, 0) should be 0", GetUnixTimeDiff(0, 0) == 0);
+    mu_assert("GetUnixTimeDiff(0, 2) should be -2", GetUnixTimeDiff(0, 2) == -2);
+    mu_assert("GetUnixTimeDiff(3, 0) should be 3", GetUnixTimeDiff(3, 0) == 3);
+
+    // Test GetUnixTimeDiffAbs function
+    mu_assert("GetUnixTimeDiffAbs(0, 0) should be 0", GetUnixTimeDiffAbs(0, 0) == 0);
+    mu_assert("GetUnixTimeDiffAbs(0, 2) should be 2", GetUnixTimeDiffAbs(0, 2) == 2);
+    mu_assert("GetUnixTimeDiffAbs(3, 0) should be 3", GetUnixTimeDiffAbs(3, 0) == 3);
 
     return 0;
 }
