@@ -11,6 +11,7 @@ struct CalendarTime {
     uint8_t hour;
     uint8_t min;
     uint8_t sec;
+    uint16_t ms;
 
     uint16_t year;
     uint8_t month;

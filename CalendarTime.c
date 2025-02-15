@@ -125,6 +125,7 @@ void UnixTime32ToCalendarTime(UnixTime32 timecount, struct CalendarTime *calenda
     calendar->hour = temp / 3600;
     calendar->min = (temp % 3600) / 60;
     calendar->sec = (temp % 3600) % 60;
+    calendar->ms = 0;
     calendar->weekday = GetWeekday(calendar->year, calendar->month, calendar->day);
 }
 
@@ -158,10 +159,10 @@ const char *CalendarTime_UnitTest(void) {
     mu_assert("December 31, 1999 should be a Friday (5)", GetWeekday(1999, 12, 31) == 5);
 
     // Test CalendarToUnixTime32 function
-    struct CalendarTime time1 = { 0, 0, 0, 1970, 1, 1, 4 }; // January 1, 1970
+    struct CalendarTime time1 = { 0, 0, 0, 0, 1970, 1, 1, 4 }; // January 1, 1970
     mu_assert("January 1, 1970 should be 0 in Unix time", CalendarToUnixTime32(&time1) == 0);
 
-    struct CalendarTime time2 = { 0, 0, 0, 2000, 1, 1, 6 }; // January 1, 2000
+    struct CalendarTime time2 = { 0, 0, 0, 0, 2000, 1, 1, 6 }; // January 1, 2000
     mu_assert("January 1, 2000 should be 946684800 in Unix time", CalendarToUnixTime32(&time2) == 946684800);
 
     // Test UnixTime32ToCalendarTime function
